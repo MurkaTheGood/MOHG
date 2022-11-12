@@ -1,0 +1,216 @@
+#ifndef __BITMAPS_H
+#define __BITMAPS_H
+
+#include <math.h>
+#include <string.h>
+
+// Cyrillic alphabet
+static const uint16_t BMP_CYR_W = 5;
+static const uint16_t BMP_CYR_H = 8;
+
+static const uint8_t *BMP_CYR = 
+	"\xfe\x09\x09\x09\xfe" // А
+	"\xff\x89\x89\x89\x71" // Б
+	"\xff\x89\x89\x89\x76" // В
+	"\xff\x01\x01\x01\x01" // Г
+	"\xde\x21\x21\x21\xde" // Д
+	"\xff\x89\x89\x89\x81" // Е
+	"\xf7\x08\x7e\x08\xf7" // Ж
+	"\x81\x89\x89\x89\x76" // З
+	"\xff\xc0\x38\x06\xff" // И
+	"\xff\xc0\x38\x06\xff" // Й
+	"\xff\x08\x14\x22\xc1" // К
+	"\xc0\x30\x0e\x01\xff" // Л
+	"\xff\x02\x1c\x02\xff" // М
+	"\xff\x08\x08\x08\xff" // Н
+	"\x7e\x81\x81\x81\x7e" // О
+	"\xff\x01\x01\x01\xff" // П
+	"\xff\x09\x09\x09\x06" // Р
+	"\x7e\x81\x81\x81\x81" // С
+	"\x01\x01\xff\x01\x01" // Т
+	"\x83\x64\x18\x06\x01" // У
+	"\x06\x09\xff\x09\x06" // Ф
+	"\x81\x66\x18\x66\x81" // Х
+	"\x7f\x80\x80\x7f\x80" // Ц
+	"\x07\x08\x08\x08\xff" // Ч
+	"\x7f\x40\x78\x40\x7f" // Ш
+	"\x7f\x40\x78\x40\xff" // Щ
+	"\x01\xff\x88\x88\x70" // Ъ
+	"\xff\x00\xff\x88\x70" // Ы
+	"\xff\x88\x88\x88\x70" // Ь
+	"\x89\x89\x89\x89\x7e" // Э
+	"\xff\x08\x7e\x81\x7e" // Ю
+	"\x8e\x51\x31\x11\xff" // Я
+;
+
+// Numbers font data
+static const uint16_t BMP_NUMBERS_W = 5;
+static const uint16_t BMP_NUMBERS_H = 8;
+
+static const uint8_t *BMP_NUMBERS = 
+	"\x7e\x81\x81\x81\x7e" // 0
+	"\x00\x04\x02\xFF\x00" // 1
+	"\xC6\xA1\x91\x89\x86" // 2
+	"\x42\x81\x89\x89\x76" // 3
+	"\x10\x18\x14\x12\xFF" // 4
+	"\x87\x89\x89\x89\x71" // 5
+	"\x7e\x89\x89\x89\x70" // 6
+	"\x01\x01\xf1\x0d\x03" // 7
+	"\x76\x89\x89\x89\x76" // 8
+	"\x0e\x91\x91\x91\x7e" // 9
+;
+
+// Special symbols data
+static const uint16_t BMP_SYMBOLS_W = 4;
+static const uint16_t BMP_SYMBOLS_H = 8;
+
+static const uint8_t *BMP_SYMBOLS = 
+	"\x00\x66\x66\x00" // :
+	"\x00\xc0\xc0\x00" // .
+	"\x08\x08\x08\x08" // -
+	"\x18\x3c\x3c\x18" // +
+	"\xc0\x30\x0c\x03" // /
+	"\x00\x40\xc0\x00" // ,
+;
+
+// invalid character (4x8)
+static const uint16_t BMP_INAVLID_W = 4;
+static const uint16_t BMP_INAVLID_H = 8;
+static const uint8_t *BMP_INAVLID = "\xFF\x81\x81\xFF";
+
+// logo
+static const uint16_t BMP_LOGO_W = 64;
+static const uint16_t BMP_LOGO_H = 32;
+static const uint8_t *BMP_LOGO = 
+	"\xff\x01\x01\xf1\xf1\x31\x31\x31\x31\x31\x31\xf1\xf1"
+	"\x01\x01\x01\x01\x01\x81\x81\x81\x81\x81\x01\x11\x71"
+	"\xe1\x81\x01\x01\x01\x81\xe1\x71\x11\x01\x01\xf1\xf1"
+	"\x01\x01\x81\xc1\xe1\x61\x31\x11\x01\x01\x01\x81\xc1"
+	"\xe1\x71\x31\x31\x31\x31\x71\xe1\xc1\x81\x01\xff\xff"
+	"\x00\x00\xff\xff\x00\x00\x00\x00\x00\x00\xff\xff\x00"
+	"\x00\x00\x3e\x7f\xe3\xc1\xc1\xc1\xc1\x63\x00\x00\xc1"
+	"\xc7\xfe\x78\x3e\x0f\x03\x00\x00\x00\x00\xff\xff\x0e"
+	"\x07\x03\x0f\x1c\x78\xe0\xc0\x80\x00\x00\x1f\x3f\x70"
+	"\xe0\xc0\xc0\xc0\xc0\xe0\x70\x3f\x1f\x00\xff\xff\x00"
+	"\x00\xf0\x80\x80\x80\x00\x00\x80\x00\x00\x00\x80\x00"
+	"\x00\x00\x00\xe0\x20\x20\x20\x20\xe0\x00\x00\x00\x80"
+	"\x80\x80\x00\x00\x00\x80\x80\x80\x80\x00\x80\x00\x00"
+	"\x80\x80\x00\x80\x80\x80\x80\x80\x00\x00\x80\x80\x80"
+	"\x00\x00\x80\x00\x00\x00\x80\x00\x00\xff\xff\x80\x80"
+	"\x8f\x88\x88\x88\x87\x80\xa1\xa6\x98\x86\x81\x80\x80"
+	"\x80\x80\x8f\x80\x80\x80\x80\x8f\x80\x80\x87\x88\x88"
+	"\x88\x87\x88\x8c\x87\x80\x80\x8f\x80\x8f\x8c\x82\x81"
+	"\x8f\x80\x80\x80\x8f\x80\x80\x80\x87\x8a\x8a\x8a\x8b"
+	"\x80\x88\x85\x82\x85\x88\x80\x80\xff";
+
+// Sign resolver
+uint8_t *BMP_sign_resolver(char symbol, uint16_t *w, uint16_t *h) {
+	// this sign is unsupported
+	if ((symbol < '!' || symbol > '/') && (symbol < ':' || symbol > '?')) {
+		*w = BMP_INAVLID_W;
+		*h = BMP_INAVLID_H;
+
+		return BMP_INAVLID;
+	}
+
+	*h = 8;
+
+	// switching, because width of signs differ
+	switch (symbol) {
+		case '#':
+		case '&':
+			*w = 6;
+		break;
+		case '*':
+		case '+':
+		case '-':
+		case '<':
+		case '=':
+		case '>':
+		case '?':
+		case '$':
+		case '%':
+			*w = 5;
+		break;
+		case '!':
+		case '"':
+		case '/':
+		case ':':
+		case ';':
+		case ',':
+			*w = 3;
+		break;
+		case '\'':
+		case '(':
+		case ')':
+		case '.':
+			*w = 2;
+		break;
+	}
+
+	// returning the bytes
+	switch (symbol) {
+		// w = 6
+		case '#': return "\x24\xff\x24\x24\xff\x24";
+		case '&': return "\x72\x8d\x8d\x55\x25\xd2";
+		// w = 5
+		case '*': return "\x2a\x1c\x08\x1c\x2a";
+		case '+': return "\x08\x08\x3e\x08\x08";
+		case '-': return "\x08\x08\x08\x08\x08";
+		case '<': return "\x08\x14\x24\x22\x41";
+		case '=': return "\x14\x14\x14\x14\x14";
+		case '>': return "\x41\x22\x14\x14\x08";
+		case '?': return "\x02\x01\xb1\x09\x06";
+		case '$': return "\x44\x4a\xff\x4a\x32";
+		case '%': return "\x83\x63\x18\xc6\xc1";
+		// w = 3
+		case '!': return "\x1e\xbf\x1e";
+		case '"': return "\x03\x00\x03";
+		case '/': return "\xc0\x3c\x03";
+		case ':': return "\x00\x42\x00";
+		case ';': return "\x00\xa2\x40";
+		case ',': return "\x40\x20\xc0";
+		// w = 2
+		case '\'': return "\x01\x03";
+		case '(': return "\x7e\x81";
+		case ')': return "\x81\x7e";
+		case '.': return "\xc0\xc0";
+
+		default:
+			*w = BMP_INAVLID_W;
+			*h = BMP_INAVLID_H;
+
+			return BMP_INAVLID;
+	}
+}
+
+// Default symbol-to-bitmap resolver. Returns the pointer to bitmap with symbol.
+uint8_t *BMP_default_symbol_resolver(char symbol, uint16_t *w, uint16_t *h) {
+	// digit
+	if (symbol >= '0' && symbol <= '9') {
+		*w = BMP_NUMBERS_W;
+		*h = BMP_NUMBERS_H;
+
+		return BMP_NUMBERS + BMP_NUMBERS_W * ((uint16_t)symbol - (uint16_t)'0');
+	}
+	// cyrillic alphabet
+	else if (symbol >= 'А' && symbol <= 'Я') {
+		*w = BMP_CYR_W;
+		*h = BMP_CYR_H;
+
+		return BMP_CYR + BMP_CYR_W * ((uint16_t)symbol - (uint16_t)'А');
+	}
+	// space
+	else if (symbol == ' ') {
+		*w = 3;
+		*h = 8;
+
+		return "\x00\x00\x00";
+	}
+	// sign
+	else {
+		return BMP_sign_resolver(symbol, w, h);
+	}
+}
+
+#endif
