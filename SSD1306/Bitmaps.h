@@ -103,10 +103,24 @@ static const uint8_t *BMP_LOGO =
 	"\x8f\x80\x80\x80\x8f\x80\x80\x80\x87\x8a\x8a\x8a\x8b"
 	"\x80\x88\x85\x82\x85\x88\x80\x80\xff";
 
+// polytech
+static const uint16_t BMP_POLY_W = 32;
+static const uint16_t BMP_POLY_H = 32;
+static const uint8_t *BMP_POLY = 
+	"\x00\x00\x80\x40\xa0\x40\xa8\x14\xa8\x44\xaa\x54\x0a\x55\x2a"
+	"\x55\x2a\x55\x2a\x55\xaa\x54\xaa\x54\xa8\x50\xa0\x40\x80\x00"
+	"\x00\x00\xa0\x54\x8a\x51\x2a\x44\x2a\x05\x02\x01\x00\x00\x00"
+	"\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x05\x0a\xf5\xfa\xfd"
+	"\xfa\xfd\xfe\xf0\x0a\x54\x8a\x51\xaa\x45\x28\x40\x80\x00\x00"
+	"\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\x20\x84"
+	"\x21\x85\x21\x85\x21\x04\x00\x00\x00\x01\x02\x04\x09\x14\x22"
+	"\x49\x22\x54\x88\x24\x88\x54\xa8\x44\x92\x44\x2a\x51\x2a\x04"
+	"\x2a\x04\x08\x02\x00\x00\x00\x00";
+
 // Sign resolver
 uint8_t *BMP_sign_resolver(char symbol, uint16_t *w, uint16_t *h) {
 	// this sign is unsupported
-	if ((symbol < '!' || symbol > '/') && (symbol < ':' || symbol > '?')) {
+	if ((symbol < '!' || symbol > '/') && (symbol < ':' || symbol > '?') && symbol != 'd') {
 		*w = BMP_INAVLID_W;
 		*h = BMP_INAVLID_H;
 
@@ -117,6 +131,9 @@ uint8_t *BMP_sign_resolver(char symbol, uint16_t *w, uint16_t *h) {
 
 	// switching, because width of signs differ
 	switch (symbol) {
+		case 'd':
+			*w = 8;
+			break;
 		case '#':
 		case '&':
 			*w = 6;
@@ -150,6 +167,8 @@ uint8_t *BMP_sign_resolver(char symbol, uint16_t *w, uint16_t *h) {
 
 	// returning the bytes
 	switch (symbol) {
+		// w = 8
+		case 'd': return "\x02\x05\x02\x00\x7e\x81\x81\x81";
 		// w = 6
 		case '#': return "\x24\xff\x24\x24\xff\x24";
 		case '&': return "\x72\x8d\x8d\x55\x25\xd2";

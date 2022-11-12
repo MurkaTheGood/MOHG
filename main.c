@@ -158,7 +158,7 @@ int main(void) {
 
         // Generate the text about resistance
         res_str[0] = 0;
-        strcat(res_str, "СОПР: ");
+        strcat(res_str, "С-Е: ");
         strcat(res_str, val_str);
         strcat(res_str, " ОМ");
 
@@ -171,12 +171,20 @@ int main(void) {
 
         // Generate the text about temperature
         res_str[0] = 0;
-        strcat(res_str, "ЦЕЛЬСИИ: ");
+        strcat(res_str, "Т-А: ");
         strcat(res_str, val_str);
+        strcat(res_str, "d");
 
         // write out
         SSD1306_graphics_text(res_str, 5, 23, BMP_default_symbol_resolver);
 
+        // draw polytech
+        SSD1306_graphics_bitmap(
+            BMP_POLY,
+            BMP_POLY_W,
+            BMP_POLY_H,
+            __SSD1306_WIDTH - BMP_POLY_W,
+            __SSD1306_HEIGHT / 2 - BMP_POLY_H / 2);
 
         // render
         SSD1306_render();
