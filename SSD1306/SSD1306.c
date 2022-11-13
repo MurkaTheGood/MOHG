@@ -124,6 +124,10 @@ void SSD1306_graphics_fill(int color) {
 
 // set the pixel
 void SSD1306_graphics_set(uint8_t x, uint8_t y, int color) {
+	// check OOB
+	if (x >= __SSD1306_WIDTH) return;
+	if (y >= __SSD1306_HEIGHT) return;
+
 	int16_t line = y / 8;
 	int16_t bit = y % 8;
 
@@ -139,6 +143,8 @@ void SSD1306_graphics_set(uint8_t x, uint8_t y, int color) {
 void SSD1306_graphics_hline(uint8_t x1, uint8_t x2, uint8_t y, int color) {
 	for (; x1 != x2; x1 += (x1 > x2 ? -1 : 1))
 		SSD1306_graphics_set(x1, y, color);
+	if (x2 >= __SSD1306_WIDTH) return;
+
 	SSD1306_graphics_set(x2, y, color);
 }
 
@@ -146,6 +152,8 @@ void SSD1306_graphics_hline(uint8_t x1, uint8_t x2, uint8_t y, int color) {
 void SSD1306_graphics_vline(uint8_t y1, uint8_t y2, uint8_t x, int color) {
 	for (; y1 != y2; y1 += (y1 > y2 ? -1 : 1))
 		SSD1306_graphics_set(x, y1, color);
+	if (y2 >= __SSD1306_HEIGHT) return;
+
 	SSD1306_graphics_set(x, y2, color);
 }
 
@@ -171,9 +179,9 @@ void SSD1306_graphics_filled_rectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8
 		y1 = c;
 	}
 
-	for (; x1 <= x2; x1++)
-		for (; y1 <= y2; y1++)
-			SSD1306_graphics_set(x1, y1, color);
+	for (uint8_t x = x1; x <= x2; x++)
+		for (uint8_t y = y1; y <= y2; y++)
+			SSD1306_graphics_set(x, y, color);
 }
 
 // draws the bitmap
@@ -213,12 +221,26 @@ void SSD1306_graphics_text(
 	uint16_t y,
 	uint8_t*(*resolver)(char, uint16_t*, uint16_t*)) {
 
+	// for newlines
+	uint16_t original_x = x;
+
 	for (int i = 0; str[i]; ++i) {
+		// check if newline
+		if (str[i] == '\n') {
+			// symbols are 8 pixels tall, so we move cursor 9 pixels down
+			y += 9;
+			x = original_x;
+			continue;
+		}
+
+		// get the bitmap for the symbol
 		uint16_t w, h;
 		uint8_t* bmp = (*resolver)(str[i], &w, &h);
 
+		// draw the symbol
 		SSD1306_graphics_bitmap(bmp, w, h, x, y);
 
+		// move the cursor
 		x += w + 1;
 	}
 }

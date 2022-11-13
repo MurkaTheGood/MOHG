@@ -232,4 +232,40 @@ uint8_t *BMP_default_symbol_resolver(char symbol, uint16_t *w, uint16_t *h) {
 	}
 }
 
+// Calculates the width and height of string
+void BMP_calculate_string_dimensions(
+	const char *str,
+	uint16_t *w,
+	uint16_t *h,
+	uint8_t*(*resolver)(char, uint16_t*, uint16_t*))
+{
+	uint16_t x = 0;
+	uint16_t y = 0;
+
+	uint16_t greatest_x = 0;
+	uint16_t greatest_y = 0;
+
+	for (int i = 0; str[i]; ++i) {
+		// check if newline
+		if (str[i] == '\n') {
+			y += 9;
+			x = 0;
+			continue;
+		}
+
+		// get the bitmap for the symbol
+		uint16_t w, h;
+		uint8_t* bmp = (*resolver)(str[i], &w, &h);
+
+		// move the cursor
+		x += w + 1;
+
+		if (x > greatest_x) greatest_x = x;
+		if (y + h > greatest_y) greatest_y = y + h;
+	}
+
+	*w = greatest_x;
+	*h = greatest_y;
+}
+
 #endif

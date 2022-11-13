@@ -9,5 +9,9 @@
 #define SET_PIN_DIRECTION(DDR, PIN_NUMBER, DIRECTION) \
 	{if (DIRECTION) DDR |= (1 << PIN_NUMBER); else DDR &= ~(1 << PIN_NUMBER);}
 
+// get pin state
+#define GET_PIN_STATE(PIN, PIN_NUMBER) \
+	(PIN &= 1 << PIN_NUMBER)
+
 
 #endif
