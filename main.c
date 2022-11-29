@@ -484,6 +484,8 @@ void f_handle_button_press(uint8_t button_id) {
                 if (g_debug_menu_page == DEBUG_MEUN_MONITOR) g_debug_menu_page = DEBUG_MEUN_CONFIG;
                 else g_debug_menu_page = DEBUG_MEUN_MONITOR;
             }
+            // force display update
+            g_timer_display_tick = 0;
         break;
         case BUTTON_MIDDLE_ID:
             // change the menu
@@ -513,6 +515,8 @@ void f_handle_button_press(uint8_t button_id) {
                 if (g_debug_menu_page == DEBUG_MEUN_MONITOR) g_debug_menu_page = DEBUG_MEUN_CONFIG;
                 else g_debug_menu_page = DEBUG_MEUN_MONITOR;
             }
+            // force display update
+            g_timer_display_tick = 0;
         break;
     }
 }
