@@ -38,6 +38,8 @@ uint8_t g_active_menu = MENU_MAIN;
 // debug menu page
 uint8_t g_debug_menu_page = DEBUG_MEUN_MONITOR;
 
+// heater states (on/off)
+int g_heater_states[THERMISTOR_AMOUNT];
 // the temperature of the fingers
 double g_finger_temperatures[THERMISTOR_AMOUNT];
 // is heating active
@@ -54,13 +56,27 @@ uint32_t g_button_hold_tick[BUTTON_AMOUNT];
  * This functions measures the temperatures of all finger thermistors.
  * It enables and disables the ADC subsystem by itself.
  * The resulting values are put into g_finger_temperatures variable.
+ * Heaters are disabled before meausurement and enabled after it (only if heating is active).
  */
 void f_measure_fingers(void);
 
 /*
- * This function enables and disables heaters.
+ * This function updates the heater states buffer.
+ * I/O port states aren't changed.
  */
-void f_handle_heaters(void);
+void f_update_heater_states(void);
+
+/*
+ * This function disables all heaters.
+ * Heater states buffer is not changed.
+ */
+void f_disable_all_heaters(void);
+
+/*
+ * This function writes the heater states buffer to the I/O ports.
+ * Heater states buffer is not changed.
+ */
+void f_flush_heaters(void);
 
 /*
  * This function updates the display.
@@ -85,6 +101,9 @@ void f_handle_button_press(uint8_t button_id);
 
 
 void f_measure_fingers(void) {
+    // disable the heaters before meausurement (only if heating is enabled)
+    if (g_is_heating_active) f_disable_heaters();
+
     // enable thermistors supply
     SET_PIN_STATE(
         PORT_OUTPUT_DEVICES,
@@ -124,26 +143,42 @@ void f_measure_fingers(void) {
         OUTPUT_DEVICE_THERMISTORS_SWITCH,
         0);
 
-    // handle the heaters
-    f_handle_heaters();
+    // update the heaters buffer
+    f_update_heater_states();
+
+    // flush the heaters buffer (only if heating is enabled)
+    if (g_is_heating_active) f_flush_heaters();
 }
 
-void f_handle_heaters(void) {
+void f_update_heater_states(void) {
     // iterate through all thermistors
     for (int i = 0; i < THERMISTOR_AMOUNT; i++) {
         // current temperature
         double temperature = g_finger_temperatures[i];
 
         // check heater state to decide what logic should we follow
-        if (GET_PIN_STATE(PIN_OUTPUT_DEVICES, HEATER_PINS[i])) {
-            // the heater is on, check if we should turn it off
+        if (g_heater_states[i]) {
+            // the heater is on, check if we should turn it off (in buffer)
             if (temperature >= g_target_temperature)
-                SET_PIN_STATE(PORT_OUTPUT_DEVICES, HEATER_PINS[i], 0);
+                g_heater_states[i] = 0;
         } else {
-            // the heater is off, check if we should turn it on
+            // the heater is off, check if we should turn it on (in buffer)
             if (temperature <= g_target_temperature - TEMPERATURE_GAP)
-                SET_PIN_STATE(PORT_OUTPUT_DEVICES, HEATER_PINS[i], 1);
+                g_heater_states[i] = 1;
         }
+    }
+}
+
+void f_disable_heaters(void) {
+    for (int i = 0; i < THERMISTOR_AMOUNT; i++) {
+        SET_PIN_STATE(PORT_OUTPUT_DEVICES, HEATER_PINS[i], 0);
+    }
+}
+
+void f_flush_heaters(void) {
+    for (int i = 0; i < THERMISTOR_AMOUNT; i++) {
+        // write the buffered state to the I/O port
+        SET_PIN_STATE(PORT_OUTPUT_DEVICES, HEATER_PINS[i], g_heater_states[i]);
     }
 }
 
@@ -452,8 +487,14 @@ void f_handle_button_press(uint8_t button_id) {
         break;
         case BUTTON_MIDDLE_ID:
             // change the menu
-            if (g_active_menu != MENU_MAIN) g_active_menu = MENU_MAIN;
-            else g_active_menu = MENU_DEBUG;
+            /* if (g_active_menu != MENU_MAIN) g_active_menu = MENU_MAIN;
+            else g_active_menu = MENU_DEBUG; */
+
+            // switch the heating
+            g_is_heating_active = !g_is_heating_active;
+            // turn heaters on/off
+            if (g_is_heating_active) f_flush_heaters();
+            else f_disable_heaters();
 
             // force display update
             g_timer_display_tick = 0;
