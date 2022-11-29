@@ -70,7 +70,7 @@ void f_update_heater_states(void);
  * This function disables all heaters.
  * Heater states buffer is not changed.
  */
-void f_disable_all_heaters(void);
+void f_disable_heaters(void);
 
 /*
  * This function writes the heater states buffer to the I/O ports.
