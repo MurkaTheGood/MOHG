@@ -577,7 +577,7 @@ void f_init() {
         __SSD1306_HEIGHT / 2 - BMP_LOGO_H / 2);
     SSD1306_render();
 
-    _delay_ms(1000);
+    _delay_ms(3000);
 }
 
 
